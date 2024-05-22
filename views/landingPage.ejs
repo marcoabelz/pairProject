@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+  </head>
+  <body style="overflow: hidden">
+    <div class="container">
+      <%- include('_navbar') %>
+      <div
+        style="
+          height: 100vh;
+          background-color: rgb(186, 70, 20);
+          opacity: 80%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+        class="cover"
+      >
+        <h1 style="text-align: center">Welcome To Xiaopee</h1>
+      </div>
+      <%- include('_script') %>
+    </div>
+  </body>
+</html>
