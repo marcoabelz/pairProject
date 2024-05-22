@@ -1,10 +1,36 @@
-const express = require('express')
-const router = express.Router()
-const Controller =require('../controllers/controller')
+const express = require("express");
+const router = express.Router();
+const Controller = require("../controllers/controller");
 
 // define the home page route
-router.get('/', Controller.landingPage)
+router.get("/", Controller.landingPage);
 
-router.get('/products', Controller.showAllProduct)
+//READ PRODUCT
+router.get("/products", Controller.showAllProduct);
+//END OF READ PRODUCT
 
-module.exports = router
+//ADD PRODUCT
+router.get("/product/add", Controller.showAddProductForm);
+router.post("/product/add", Controller.addProductPost);
+//END OF ADD PRODUCT
+
+//Menampilkan detail product
+router.get("/product/:productId", Controller.showDetailProductById);
+
+//EDIT
+router.get("/product/:productId/edit", Controller.showEditProduct);
+router.post("/product/:productId/edit", Controller.detailProductUpdate);
+//END OF EDIT
+
+//READ USER
+router.get("/users", Controller.showAllUser);
+//END OF READ USER
+
+//Login user
+//Logout user
+
+//DELETE
+router.get("/users/:id/delete");
+//END OF DELETE
+
+module.exports = router;

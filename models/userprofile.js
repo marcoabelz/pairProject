@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { options } = require('../routers');
 module.exports = (sequelize, DataTypes) => {
   class UserProfile extends Model {
     /**
@@ -13,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       UserProfile.belongsTo(models.User, {foreignKey: "UserId"})
     }
+
+    dateFormat() {
+      return this.dateOfBirth.toISOString().slice(0,10)
+    }
   }
   UserProfile.init({
     name: DataTypes.STRING,
@@ -20,10 +25,14 @@ module.exports = (sequelize, DataTypes) => {
     address: DataTypes.STRING,
     phoneNumber: DataTypes.STRING,
     gender: DataTypes.CHAR,
+    balance: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'UserProfile',
   });
+  UserProfile.beforeValidate((data, option) => {
+    data.balance = 0
+  })
   return UserProfile;
 };
