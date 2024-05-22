@@ -31,6 +31,7 @@ router.get("/users", Controller.showAllUser);
 
 //DELETE
 router.get("/users/:id/delete");
+router.get("/products/:productId/delete", Controller.deleteProductById);
 //END OF DELETE
 
 module.exports = router;

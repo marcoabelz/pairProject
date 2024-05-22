@@ -53,9 +53,15 @@
                   style="padding: 10px 0px; background-color: rgb(255, 174, 0)"
                   class="price-section"
                 >
-                  <h5 class="card-title"><%= data.price %></h5>
+                  <h5 class="card-title"><%= format_currency(data.price) %></h5>
                   <a href="#" class="btn btn-success me-1">Buy</a>
                   <a href="#" class="btn btn-primary">See Detail</a>
+                  <a
+                    href="/products/<%= data.id %>/delete"
+                    class="btn btn-danger ms-1"
+                    style="background-color: rgb(234, 72, 72)"
+                    >Delete</a
+                  >
                 </div>
               </div>
             </div>
