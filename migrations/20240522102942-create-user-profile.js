@@ -24,6 +24,9 @@ module.exports = {
       gender: {
         type: Sequelize.CHAR,
       },
+      balance: {
+        type: Sequelize.INTEGER
+      },
       UserId: {
         type: Sequelize.INTEGER,
         references: {
