@@ -12,12 +12,11 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   let datas = require('../data/products.json').map(product => {
-    product.createdAt = product.updatedAt = new Date()
-    return product
+   let datas = require('../data/carts.json').map(cart => {
+    cart.createdAt = cart.updatedAt = new Date()
+    return cart
    })
-   console.log(datas);
-   await queryInterface.bulkInsert("Products", datas)
+   await queryInterface.bulkInsert("Carts", datas)
   },
 
   async down (queryInterface, Sequelize) {
@@ -27,6 +26,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete("Products", null)
+    await queryInterface.bulkDelete("Carts", null)
   }
 };
