@@ -12,6 +12,29 @@ module.exports = (sequelize, DataTypes) => {
       Product.belongsTo(models.Category, { foreignKey: "CategoryId" });
       Product.hasMany(models.Cart, { foreignKey: "ProductId" });
     }
+
+    // static async getProductByCategory(category) {
+    //   try {
+    //     let option = {
+    //       include: {
+    //         model: sequelize.models.Product,
+    //       }, 
+    //       order: [['name']]
+    //     }
+
+    //     if (category) {
+    //       option.where = {
+    //         category
+    //       }
+    //     }
+        
+    //     let data = await Product.findAll(option)
+
+    //     return data
+    //   } catch (error) {
+    //     throw error
+    //   }
+    // }
   }
   Product.init(
     {

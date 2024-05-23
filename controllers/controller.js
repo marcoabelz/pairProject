@@ -6,7 +6,12 @@ const bcryptjs = require("bcryptjs");
 class Controller {
   static async landingPage(req, res) {
     try {
-      res.render("landingPage", { title: "Landing Page" });
+      // let {category} = req.query
+      // console.log(req.query);
+      let datas = await Category.findAll()
+      let datas1 = await Product.findAll()
+      // console.log(datas, '++++++');
+      res.render("landingPage", { title: "Landing Page" , datas, datas1 , format_currency});
     } catch (error) {
       res.send(error);
     }
@@ -182,6 +187,7 @@ class Controller {
       res.redirect;
     } catch (error) {
       res.send(error);
+
     }
   }
 }
