@@ -9,7 +9,13 @@ class Controller {
 
   static async landingPage(req, res) {
     try {
+      // let {category} = req.query
+      // console.log(req.query);
       let datas = await Category.findAll();
+      // console.log(datas, '++++++');
+
+      let datas = await Category.findAll();
+
       let datas1 = await Product.findAll({ limit: 8 });
       res.render("landingPageQ", {
         title: "Landing Page",
@@ -79,6 +85,13 @@ class Controller {
 
   static async showEditProduct(req, res) {
     try {
+      let {productId} = req.params
+      let products = await Product.findByPk(productId, {
+        include: Category
+      })
+      // console.log(products);
+      let categories = await Category.findAll()
+      res.render('formEditProduct', {title: 'Form Edit Product', products, categories})
     } catch (error) {
       res.send(error);
     }
@@ -86,7 +99,19 @@ class Controller {
 
   static async detailProductUpdate(req, res) {
     try {
+      
+      let {productId} = req.params
+      let {name, description, price, CategoryId } = req.body
+
+      await Product.update({name, description, price, CategoryId}, {
+        where: {
+          id: productId
+        }
+      })
+      // console.log(req.body);
+      res.redirect(`/products`)
     } catch (error) {
+      console.log(error);
       res.send(error);
     }
   }
@@ -193,6 +218,22 @@ class Controller {
       res.send(error);
     }
   }
+  
+  static async showProductByCategory(req, res) {
+    try {
+      let {id} = req.params
+      // console.log(id);
+
+      let dataProduct = await Category.findByPk(id,{
+        include: Product
+      })
+      
+      let data = dataProduct.Products
+
+      // res.send(dataProduct)
+      res.render('productByCategory', {data, format_currency})
+    } catch (error) {
+      res.send(error)
 
   static async logout(req, res) {
     try {
@@ -200,6 +241,7 @@ class Controller {
       res.redirect("/login");
     } catch (error) {
       res.send(error);
+
     }
   }
 }
