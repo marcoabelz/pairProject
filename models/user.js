@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
     }
   );
-  User.beforeValidate((data, option) => {
+  User.beforeCreate((data, option) => {
     data.role = "customer";
   });
   // User.beforeCreate((data, option) => {
