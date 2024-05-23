@@ -5,7 +5,12 @@ const { format_currency } = require("../helpers");
 class Controller {
   static async landingPage(req, res) {
     try {
-      res.render("landingPage", { title: "Landing Page" });
+      // let {category} = req.query
+      // console.log(req.query);
+      let datas = await Category.findAll()
+      let datas1 = await Product.findAll()
+      // console.log(datas, '++++++');
+      res.render("landingPage", { title: "Landing Page" , datas, datas1 , format_currency});
     } catch (error) {
       res.send(error);
     }
@@ -108,6 +113,14 @@ class Controller {
       res.redirect("/products");
     } catch (error) {
       res.send(error);
+    }
+  }
+
+  static async getLogin(req, res) {
+    try {
+      res.render('login')
+    } catch (error) {
+      res.send(error)
     }
   }
 }

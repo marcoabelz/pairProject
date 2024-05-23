@@ -27,6 +27,7 @@ router.get("/users", Controller.showAllUser);
 //END OF READ USER
 
 //Login user
+router.get('/login', Controller.getLogin)
 //Logout user
 
 //DELETE
