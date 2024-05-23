@@ -14,6 +14,9 @@ router.get("/product/add", Controller.showAddProductForm);
 router.post("/product/add", Controller.addProductPost);
 //END OF ADD PRODUCT
 
+//menampilkan product berdasarkan categorynya
+router.get("/product/category/:id", Controller.showProductByCategory)
+
 //Menampilkan detail product
 router.get("/product/:productId", Controller.showDetailProductById);
 
