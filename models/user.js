@@ -1,5 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
+const bcryptjs = require("bcryptjs");
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -20,10 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Email tidak boleh kosong",
+            msg: "Email tidak boleh kosongAAAA",
           },
           notNull: {
-            msg: "Email tidak boleh kosong",
+            msg: "Email tidak boleh kosongAAAA",
           },
         },
       },
@@ -49,10 +51,10 @@ module.exports = (sequelize, DataTypes) => {
   User.beforeValidate((data, option) => {
     data.role = "customer";
   });
-  User.beforeCreate((data, option) => {
-    const salt = bcryptjs.genSaltSync(10);
-    const hash = bcryptjs.hashSync(this.password, salt);
-    this.password = hash
-  })
+  // User.beforeCreate((data, option) => {
+  //   const salt = bcryptjs.genSaltSync(10);
+  //   const hash = bcryptjs.hashSync(this.password, salt);
+  //   this.password = hash;
+  // });
   return User;
 };

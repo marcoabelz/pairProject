@@ -3,6 +3,31 @@ const router = express.Router();
 const Controller = require("../controllers/controller");
 
 // define the home page route
+
+//SignUp User
+router.get("/signup", Controller.showSignupForm);
+router.post("/signup", Controller.signupUserPost);
+//END OF SignUpUser
+
+//Login user
+router.get("/login", Controller.showLoginForm);
+router.post("/login", Controller.loginUserPost);
+
+//Logout
+router.get("/logout", Controller.logout);
+
+//SESSION
+router.use(function (req, res, next) {
+  console.log(req.session);
+
+  if (!req.session.email) {
+    const error = "You did not login yet! :D";
+    res.redirect(`/login?error=${error}`);
+  } else {
+    next();
+  }
+});
+
 router.get("/", Controller.landingPage);
 
 //READ PRODUCT
@@ -26,15 +51,10 @@ router.post("/product/:productId/edit", Controller.detailProductUpdate);
 router.get("/users", Controller.showAllUser);
 //END OF READ USER
 
-//Login user
-router.get("/login", Controller.showLoginForm);
-router.post("/login", Controller.loginUserPost);
 //Logout user
 
-//SignUp User
-router.get("/signup", Controller.showSignupForm);
-router.post("/signup", Controller.signupUserPost);
-//END OF SignUpUser
+//User Profile
+// router.post("/userProfile/:userId", Controller.userProfilePost);
 
 //DELETE
 router.get("/users/:id/delete");
