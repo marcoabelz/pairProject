@@ -27,7 +27,14 @@ router.get("/users", Controller.showAllUser);
 //END OF READ USER
 
 //Login user
+router.get("/login", Controller.showLoginForm);
+router.post("/login", Controller.loginUserPost);
 //Logout user
+
+//SignUp User
+router.get("/signup", Controller.showSignupForm);
+router.post("/signup", Controller.signupUserPost);
+//END OF SignUpUser
 
 //DELETE
 router.get("/users/:id/delete");

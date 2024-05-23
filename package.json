@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/marcoabelz/pairProject#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "nodemon": "^3.1.0",
