@@ -9,8 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasOne(models.UserProfile, {foreignKey: "UserId"});
-      User.hasMany(models.Cart, {foreignKey: "UserId"})
+      User.hasOne(models.UserProfile, { foreignKey: "UserId" });
+      User.hasMany(models.Cart, { foreignKey: "UserId" });
     }
   }
   User.init(
@@ -24,5 +24,8 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
     }
   );
+  User.beforeValidate((data, option) => {
+    data.role = "customer";
+  });
   return User;
 };

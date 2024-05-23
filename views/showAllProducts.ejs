@@ -55,7 +55,9 @@
                 >
                   <h5 class="card-title"><%= format_currency(data.price) %></h5>
                   <a href="#" class="btn btn-success me-1">Buy</a>
-                  <a href="#" class="btn btn-primary">See Detail</a>
+                  <a href="/product/<%= data.id %>" class="btn btn-primary"
+                    >See Detail</a
+                  >
                   <a
                     href="/products/<%= data.id %>/delete"
                     class="btn btn-danger ms-1"
