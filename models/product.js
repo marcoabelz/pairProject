@@ -74,6 +74,12 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      imageUrl: {
+        type: DataTypes.STRING
+      },
+      stock: {
+        type: DataTypes.INTEGER
+      },
       CategoryId: {
         type: DataTypes.INTEGER,
         allowNull: false,
