@@ -117,7 +117,7 @@ class Controller {
       // console.log(req.body);
       res.redirect(`/products`);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       res.send(error);
     }
   }
@@ -259,28 +259,29 @@ class Controller {
           UserId: userId,
         },
       });
-      console.log(data);
+      // console.log(data, "DADADA");
       if (data) {
         res.render("formUserProfile", {
           title: "Form User Profile",
           data,
           userId,
         });
-      } else {
-        console.log(userId, "ETTETE");
+      // } else {
+      //   console.log(userId, "ETTETE");
         res.render("formNewUserProfile", {
           title: "Form New User Profile",
           userId,
         });
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       res.send(error);
     }
   }
 
   static async userProfilePost(req, res) {
     try {
+      // console.log(req.body);
       let { name, dateOfBirth, address, phoneNumber, gender } = req.body;
       let { userId } = req.session;
       await UserProfile.create({
@@ -293,7 +294,7 @@ class Controller {
       });
       res.redirect("/");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       res.send(error);
     }
   }
