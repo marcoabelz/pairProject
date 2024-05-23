@@ -103,11 +103,10 @@ class Controller {
       let {productId} = req.params
       let {name, description, price, CategoryId } = req.body
 
-      await Product.update({name, description, price, CategoryId}, {
-        where: {
-          id: productId
-        }
+      let data = await Product.findByPk(productId, {
+
       })
+      await data.update({name, description, price, CategoryId})
       // console.log(req.body);
       res.redirect(`/products`)
     } catch (error) {
