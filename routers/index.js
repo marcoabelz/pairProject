@@ -19,8 +19,8 @@ router.get("/logout", Controller.logout);
 //SESSION
 
 let authCheck = function (req, res, next) {
-  console.log(req.session);
-
+  // console.log(req.session);
+  // req.session.id = 0
   if (!req.session.email) {
     const error = "You did not login yet! :D";
     res.redirect(`/login?error=${error}`);
@@ -30,7 +30,7 @@ let authCheck = function (req, res, next) {
 };
 
 let roleAdmin = function (req, res, next) {
-  console.log(req.session);
+  // console.log(req.session);
 
   if (req.session.role !== "admin") {
     const error = "You did not have access! :D";
@@ -52,14 +52,18 @@ router.post("/product/add", authCheck, Controller.addProductPost);
 //END OF ADD PRODUCT
 
 //menampilkan product berdasarkan categorynya
-router.get("/product/category/:id", Controller.showProductByCategory)
+router.get("/product/category/:id", Controller.showProductByCategory);
 
 //Menampilkan detail product
 router.get("/product/:productId", authCheck, Controller.showDetailProductById);
 
 //EDIT
 router.get("/product/:productId/edit", authCheck, Controller.showEditProduct);
-router.post("/product/:productId/edit", authCheck, Controller.detailProductUpdate);
+router.post(
+  "/product/:productId/edit",
+  authCheck,
+  Controller.detailProductUpdate
+);
 //END OF EDIT
 
 //READ USER
@@ -69,11 +73,16 @@ router.get("/users", authCheck, roleAdmin, Controller.showAllUser);
 //Logout user
 
 //User Profile
-// router.post("/userProfile/:userId", authCheck, Controller.userProfilePost);
+router.get("/userProfile/:userId", authCheck, Controller.showFormUserProfile);
+router.post("/userProfile/:userId", authCheck, Controller.userProfilePost);
 
 //DELETE
 router.get("/users/:id/delete");
-router.get("/products/:productId/delete", authCheck, Controller.deleteProductById);
+router.get(
+  "/products/:productId/delete",
+  authCheck,
+  Controller.deleteProductById
+);
 //END OF DELETE
 
 module.exports = router;
