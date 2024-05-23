@@ -8,10 +8,15 @@ class Controller {
     try {
       // let {category} = req.query
       // console.log(req.query);
-      let datas = await Category.findAll()
-      let datas1 = await Product.findAll()
+      let datas = await Category.findAll();
+      let datas1 = await Product.findAll({ limit: 8 });
       // console.log(datas, '++++++');
-      res.render("landingPage", { title: "Landing Page" , datas, datas1 , format_currency});
+      res.render("landingPageQ", {
+        title: "Landing Page",
+        datas,
+        datas1,
+        format_currency,
+      });
     } catch (error) {
       res.send(error);
     }
@@ -129,7 +134,7 @@ class Controller {
 
   static async showLoginForm(req, res) {
     try {
-      res.render("formLogin", { title: "Login Form" });
+      res.render("loginQ", { title: "Login Form" });
     } catch (error) {
       res.send(error);
     }
@@ -140,11 +145,7 @@ class Controller {
       let { email, password } = req.body;
       let data = await User.findOne({ where: { email } });
       if (data) {
-        let temp_password = data.password;
-
-        const salt = bcryptjs.genSaltSync(10);
-        const hash = bcryptjs.hashSync(temp_password, salt);
-        let result = bcryptjs.compareSync(password, hash);
+        let result = bcryptjs.compareSync(password, data.password);
         if (!result) {
           res.send("Username / Password salah!");
         } else {
@@ -156,6 +157,7 @@ class Controller {
         );
       }
     } catch (error) {
+      console.log(error);
       res.send(error);
     }
   }
@@ -170,11 +172,14 @@ class Controller {
 
   static async signupUserPost(req, res) {
     try {
-      let { email, password, name, dateOfBirth, address, phoneNumber, gender } =
-        req.body;
-      const salt = bcryptjs.genSaltSync(10);
-      const hash = bcryptjs.hashSync(password, salt);
-      password = hash;
+      // let { email, password, name, dateOfBirth, address, phoneNumber, gender } =
+      //   req.body;
+      let { email, password } = req.body;
+      if (password) {
+        const salt = bcryptjs.genSaltSync(10);
+        const hash = bcryptjs.hashSync(password, salt);
+        password = hash;
+      }
       await User.create({ email, password });
       // await UserProfile.create({
       //   name,
@@ -184,10 +189,13 @@ class Controller {
       //   gender,
       // });
       res.redirect("/");
-      res.redirect;
+      // res.redirect;
     } catch (error) {
+      if (error.name === "SequelizeValidationError") {
+        let errors = error.errors.map((err) => err.message);
+        res.send(errors);
+      }
       res.send(error);
-
     }
   }
 }

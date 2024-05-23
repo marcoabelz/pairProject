@@ -15,8 +15,30 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      email: DataTypes.STRING,
-      password: DataTypes.STRING,
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Email tidak boleh kosong",
+          },
+          notNull: {
+            msg: "Email tidak boleh kosong",
+          },
+        },
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Password tidak boleh kosong",
+          },
+          notNull: {
+            msg: "Password tidak boleh kosong",
+          },
+        },
+      },
       role: DataTypes.STRING,
     },
     {
@@ -27,5 +49,10 @@ module.exports = (sequelize, DataTypes) => {
   User.beforeValidate((data, option) => {
     data.role = "customer";
   });
+  User.beforeCreate((data, option) => {
+    const salt = bcryptjs.genSaltSync(10);
+    const hash = bcryptjs.hashSync(this.password, salt);
+    this.password = hash
+  })
   return User;
 };
