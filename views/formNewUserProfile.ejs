@@ -16,7 +16,6 @@
             id="name"
             name="name"
             autocomplete="off"
-            value="<%= data.name %>"
           />
         </div>
         <div class="mb-3">
@@ -26,18 +25,11 @@
             class="form-control"
             id="dateOfBirth"
             name="dateOfBirth"
-            value="<%= data.dateOfBirth %>"
           />
         </div>
         <div class="mb-3">
           <label for="address" class="form-label">Address</label>
-          <input
-            type="text"
-            class="form-control"
-            id="address"
-            name="address"
-            value="<%= data.address %>"
-          />
+          <input type="text" class="form-control" id="address" name="address" />
         </div>
         <div class="mb-3">
           <label for="phoneNumber" class="form-label">Phone Number</label>
@@ -46,22 +38,28 @@
             class="form-control"
             id="phoneNumber"
             name="phoneNumber"
-            value="<%= data.phoneNumber %>"
           />
         </div>
         <div class="mb-3">
           <label for="gender" class="form-label">Gender</label>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="gender" id="male"
-            value="M"<%= data.gender === "M" ? "checked" : "" %> />
+            <input
+              class="form-check-input"
+              type="radio"
+              name="gender"
+              id="male"
+              value="M"
+            />
             <label class="form-check-label" for="male">M</label>
           </div>
-          <% if (data.gender === "M") { %>
-          <p>WOI</p>
-          <% } %>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="gender"
-            id="female" value="F"<%= data.gender === "F" ? "checked" : "" %> />
+            <input
+              class="form-check-input"
+              type="radio"
+              name="gender"
+              id="female"
+              value="F"
+            />
             <label class="form-check-label" for="female">F</label>
           </div>
         </div>

@@ -88,7 +88,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   // UserProfile.beforeValidate((data, option) => {
-  //   data.balance = 0
-  // })
+  //   data.balance = 0;
+  // });
   return UserProfile;
 };

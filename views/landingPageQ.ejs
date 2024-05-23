@@ -12,6 +12,7 @@
   </head>
   <body>
     <div class="container"><%- include('_navbar') %></div>
+    <a href="/userProfile/<%= userId %>">User Profile</a>
     <div class="container mt-4">
       <div
         id="carouselExampleIndicators"
@@ -95,7 +96,10 @@
           <div style="cursor: pointer" class="col-6 col-md-2 mb-4">
             <div class="card category-card text-center">
               <div class="card-body">
-                <a href="/product/category/<%= category.id %>" style="text-decoration: none; color: black;">
+                <a
+                  href="/product/category/<%= category.id %>"
+                  style="text-decoration: none; color: black"
+                >
                   <img
                     style="height: 150px"
                     src="<%= category.imageUrl %>"

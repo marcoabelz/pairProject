@@ -12,6 +12,7 @@ class Controller {
       // let {category} = req.query
       // console.log(req.query);
       // console.log(datas, '++++++');
+      let userId = req.session.id;
 
       let datas = await Category.findAll();
 
@@ -21,6 +22,7 @@ class Controller {
         datas,
         datas1,
         format_currency,
+        userId,
       });
     } catch (error) {
       res.send(error);
@@ -64,7 +66,12 @@ class Controller {
       await Product.create({ name, description, price, CategoryId });
       res.redirect("/products");
     } catch (error) {
-      res.send(error);
+      if (error.name === "SequelizeValidationError") {
+        let errors = error.errors.map((err) => err.message);
+        res.send(errors);
+      } else {
+        res.send(error);
+      }
     }
   }
 
@@ -84,13 +91,17 @@ class Controller {
 
   static async showEditProduct(req, res) {
     try {
-      let {productId} = req.params
+      let { productId } = req.params;
       let products = await Product.findByPk(productId, {
-        include: Category
-      })
+        include: Category,
+      });
       // console.log(products);
-      let categories = await Category.findAll()
-      res.render('formEditProduct', {title: 'Form Edit Product', products, categories})
+      let categories = await Category.findAll();
+      res.render("formEditProduct", {
+        title: "Form Edit Product",
+        products,
+        categories,
+      });
     } catch (error) {
       res.send(error);
     }
@@ -98,16 +109,13 @@ class Controller {
 
   static async detailProductUpdate(req, res) {
     try {
-      
-      let {productId} = req.params
-      let {name, description, price, CategoryId } = req.body
+      let { productId } = req.params;
+      let { name, description, price, CategoryId } = req.body;
 
-      let data = await Product.findByPk(productId, {
-
-      })
-      await data.update({name, description, price, CategoryId})
+      let data = await Product.findByPk(productId, {});
+      await data.update({ name, description, price, CategoryId });
       // console.log(req.body);
-      res.redirect(`/products`)
+      res.redirect(`/products`);
     } catch (error) {
       console.log(error);
       res.send(error);
@@ -158,10 +166,10 @@ class Controller {
   static async loginUserPost(req, res) {
     try {
       let { email, password } = req.body;
-      console.log(req.body);
+      // console.log(req.body);
 
       let data = await User.findOne({ where: { email } });
-      console.log(data);
+      // console.log(data);
       if (data) {
         let result = bcryptjs.compareSync(password, data.password);
         if (!result) {
@@ -169,6 +177,7 @@ class Controller {
         } else {
           req.session.email = data.email;
           req.session.role = data.role;
+          req.session.userId = data.id;
 
           res.redirect("/");
         }
@@ -216,22 +225,22 @@ class Controller {
       }
     }
   }
-  
+
   static async showProductByCategory(req, res) {
     try {
-      let {id} = req.params
+      let { id } = req.params;
       // console.log(id);
 
-      let dataProduct = await Category.findByPk(id,{
-        include: Product
-      })
-      
-      let data = dataProduct.Products
+      let dataProduct = await Category.findByPk(id, {
+        include: Product,
+      });
+
+      let data = dataProduct.Products;
 
       // res.send(dataProduct)
-      res.render('productByCategory', {data, format_currency})
+      res.render("productByCategory", { data, format_currency });
     } catch (error) {
-      res.send(error)
+      res.send(error);
     }
   }
   static async logout(req, res) {
@@ -240,7 +249,52 @@ class Controller {
       res.redirect("/login");
     } catch (error) {
       res.send(error);
+    }
+  }
+  static async showFormUserProfile(req, res) {
+    try {
+      let userId = req.session.userId;
+      let data = await UserProfile.findOne({
+        where: {
+          UserId: userId,
+        },
+      });
+      console.log(data);
+      if (data) {
+        res.render("formUserProfile", {
+          title: "Form User Profile",
+          data,
+          userId,
+        });
+      } else {
+        console.log(userId, "ETTETE");
+        res.render("formNewUserProfile", {
+          title: "Form New User Profile",
+          userId,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.send(error);
+    }
+  }
 
+  static async userProfilePost(req, res) {
+    try {
+      let { name, dateOfBirth, address, phoneNumber, gender } = req.body;
+      let { userId } = req.session;
+      await UserProfile.create({
+        name,
+        dateOfBirth,
+        address,
+        phoneNumber,
+        gender,
+        UserId: userId,
+      });
+      res.redirect("/");
+    } catch (error) {
+      console.log(error);
+      res.send(error);
     }
   }
 }

@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     //     let option = {
     //       include: {
     //         model: sequelize.models.Product,
-    //       }, 
+    //       },
     //       order: [['name']]
     //     }
 
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     //         category
     //       }
     //     }
-        
+
     //     let data = await Product.findAll(option)
 
     //     return data
@@ -72,13 +72,17 @@ module.exports = (sequelize, DataTypes) => {
           notEmpty: {
             msg: "Price tidak boleh kosong!",
           },
+          min: {
+            msg: "Harga tidak boleh 0",
+            args: 1,
+          },
         },
       },
       imageUrl: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
       },
       stock: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
       CategoryId: {
         type: DataTypes.INTEGER,
