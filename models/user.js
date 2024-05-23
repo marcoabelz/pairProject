@@ -1,5 +1,8 @@
 "use strict";
 const { Model } = require("sequelize");
+const bcryptjs = require("bcryptjs");
+var nodemailer = require("nodemailer");
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -12,6 +15,31 @@ module.exports = (sequelize, DataTypes) => {
       User.hasOne(models.UserProfile, { foreignKey: "UserId" });
       User.hasMany(models.Cart, { foreignKey: "UserId" });
     }
+
+    static async nodeMailer(email) {
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "marcoabel25@gmail.com",
+          pass: "livk orbl blac qfeh",
+        },
+      });
+    
+      var mailOptions = {
+        from: "marcoabel25@gmail.com",
+        to: email,
+        subject: "Congratulation, Your account has been registered",
+        text: "Welcome to Xiopee, happy Xiaoping!",
+      };
+    
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
+    }
   }
   User.init(
     {
@@ -20,10 +48,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Email tidak boleh kosong",
+            msg: "Email tidak boleh kosongAAAA",
           },
           notNull: {
-            msg: "Email tidak boleh kosong",
+            msg: "Email tidak boleh kosongAAAA",
           },
         },
       },
@@ -46,13 +74,13 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
     }
   );
-  User.beforeValidate((data, option) => {
+  User.beforeCreate((data, option) => {
     data.role = "customer";
   });
-  User.beforeCreate((data, option) => {
-    const salt = bcryptjs.genSaltSync(10);
-    const hash = bcryptjs.hashSync(this.password, salt);
-    this.password = hash
-  })
+  // User.beforeCreate((data, option) => {
+  //   const salt = bcryptjs.genSaltSync(10);
+  //   const hash = bcryptjs.hashSync(this.password, salt);
+  //   this.password = hash;
+  // });
   return User;
 };
