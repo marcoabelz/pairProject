@@ -143,21 +143,32 @@ class Controller {
   static async loginUserPost(req, res) {
     try {
       let { email, password } = req.body;
+      console.log(req.body);
+
       let data = await User.findOne({ where: { email } });
+      console.log(data);
       if (data) {
         let result = bcryptjs.compareSync(password, data.password);
         if (!result) {
           res.send("Username / Password salah!");
         } else {
-          res.send(`${data.role} - berhasil login`);
+          req.session.email = data.email;
+
+          res.redirect("/");
         }
-      } else {
-        res.send(
-          "Username tidak ditemukan, silahkan mendaftar terlebih dahulu"
-        );
+        // let result = bcryptjs.compareSync(password, data.password);
+        // if (!result) {
+        //   res.send("Username / Password salah!");
+        // } else {
+        //   res.send(`${data.role} - berhasil login`);
+        // }
+        // } else {
+        //   res.send(
+        //     "Username tidak ditemukan, silahkan mendaftar terlebih dahulu"
+        //   );
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       res.send(error);
     }
   }
@@ -173,13 +184,14 @@ class Controller {
   static async signupUserPost(req, res) {
     try {
       // let { email, password, name, dateOfBirth, address, phoneNumber, gender } =
-      //   req.body;
+        // req.body;
       let { email, password } = req.body;
       if (password) {
         const salt = bcryptjs.genSaltSync(10);
         const hash = bcryptjs.hashSync(password, salt);
         password = hash;
       }
+      // console.log(email, password);
       await User.create({ email, password });
       // await UserProfile.create({
       //   name,
@@ -191,10 +203,20 @@ class Controller {
       res.redirect("/");
       // res.redirect;
     } catch (error) {
+      console.log(error);
       if (error.name === "SequelizeValidationError") {
         let errors = error.errors.map((err) => err.message);
         res.send(errors);
       }
+      res.send(error);
+    }
+  }
+
+  static async logout(req, res) {
+    try {
+      req.session.destroy();
+      res.redirect("/login");
+    } catch (error) {
       res.send(error);
     }
   }
