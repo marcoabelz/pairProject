@@ -1,6 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 const bcryptjs = require("bcryptjs");
+var nodemailer = require("nodemailer");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -13,6 +14,31 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.hasOne(models.UserProfile, { foreignKey: "UserId" });
       User.hasMany(models.Cart, { foreignKey: "UserId" });
+    }
+
+    static async nodeMailer(email) {
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "marcoabel25@gmail.com",
+          pass: "livk orbl blac qfeh",
+        },
+      });
+    
+      var mailOptions = {
+        from: "marcoabel25@gmail.com",
+        to: email,
+        subject: "Congratulation, Your account has been registered",
+        text: "Welcome to Xiopee, happy Xiaoping!",
+      };
+    
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
     }
   }
   User.init(

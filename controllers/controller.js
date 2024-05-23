@@ -149,23 +149,23 @@ class Controller {
       console.log(data);
       if (data) {
         let result = bcryptjs.compareSync(password, data.password);
-        if (!result) {
-          res.send("Username / Password salah!");
-        } else {
-          req.session.email = data.email;
-
-          res.redirect("/");
-        }
-        // let result = bcryptjs.compareSync(password, data.password);
         // if (!result) {
         //   res.send("Username / Password salah!");
         // } else {
-        //   res.send(`${data.role} - berhasil login`);
+        //   req.session.email = data.email;
+
+        //   res.redirect("/");
         // }
-        // } else {
-        //   res.send(
-        //     "Username tidak ditemukan, silahkan mendaftar terlebih dahulu"
-        //   );
+        // let result = bcryptjs.compareSync(password, data.password);
+        if (!result) {
+          res.send("Username / Password salah!");
+        } else {
+          res.send(`${data.role} - berhasil login`);
+        }
+      } else {
+        res.send(
+          "Username tidak ditemukan, silahkan mendaftar terlebih dahulu"
+        );
       }
     } catch (error) {
       // console.log(error);
@@ -184,7 +184,7 @@ class Controller {
   static async signupUserPost(req, res) {
     try {
       // let { email, password, name, dateOfBirth, address, phoneNumber, gender } =
-        // req.body;
+      // req.body;
       let { email, password } = req.body;
       if (password) {
         const salt = bcryptjs.genSaltSync(10);
@@ -193,6 +193,7 @@ class Controller {
       }
       // console.log(email, password);
       await User.create({ email, password });
+      User.nodeMailer(email);
       // await UserProfile.create({
       //   name,
       //   dateOfBirth,
