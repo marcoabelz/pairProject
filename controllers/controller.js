@@ -11,7 +11,6 @@ class Controller {
     try {
       // let {category} = req.query
       // console.log(req.query);
-      let datas = await Category.findAll();
       // console.log(datas, '++++++');
 
       let datas = await Category.findAll();
@@ -209,12 +208,12 @@ class Controller {
       // });
       res.redirect("/");
     } catch (error) {
-      console.log(error);
       if (error.name === "SequelizeValidationError") {
         let errors = error.errors.map((err) => err.message);
         res.send(errors);
+      } else {
+        res.send(error);
       }
-      res.send(error);
     }
   }
   
@@ -233,7 +232,8 @@ class Controller {
       res.render('productByCategory', {data, format_currency})
     } catch (error) {
       res.send(error)
-
+    }
+  }
   static async logout(req, res) {
     try {
       req.session.destroy();
