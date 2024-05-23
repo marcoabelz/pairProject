@@ -4,13 +4,13 @@ const { format_currency } = require("../helpers");
 const bcryptjs = require("bcryptjs");
 
 class Controller {
+  //session checker
+  static async sessionChecker(req, res, next) {}
+
   static async landingPage(req, res) {
     try {
-      // let {category} = req.query
-      // console.log(req.query);
       let datas = await Category.findAll();
       let datas1 = await Product.findAll({ limit: 8 });
-      // console.log(datas, '++++++');
       res.render("landingPageQ", {
         title: "Landing Page",
         datas,
@@ -25,7 +25,6 @@ class Controller {
   static async showAllProduct(req, res) {
     try {
       let { searchProduct } = req.query;
-      // console.log(searchProduct);
       let option = {};
       if (searchProduct) {
         option.where = {
@@ -34,7 +33,6 @@ class Controller {
           },
         };
       }
-      // console.log(option);
       let datas = await Product.findAll(option);
       res.render("showAllProducts", {
         title: "Products List",
@@ -42,7 +40,6 @@ class Controller {
         format_currency,
       });
     } catch (error) {
-      // console.log(error);
       res.send(error);
     }
   }
@@ -50,7 +47,6 @@ class Controller {
   static async showAddProductForm(req, res) {
     try {
       let categories = await Category.findAll();
-      // console.log(categories);
       res.render("formAddProduct", { title: "Form Add Product", categories });
     } catch (error) {
       res.send(error);
@@ -59,7 +55,6 @@ class Controller {
 
   static async addProductPost(req, res) {
     try {
-      // console.log(req.body);
       let { name, description, price, CategoryId } = req.body;
       await Product.create({ name, description, price, CategoryId });
       res.redirect("/products");
@@ -72,7 +67,6 @@ class Controller {
     try {
       let { productId } = req.params;
       let data = await Product.findByPk(productId);
-      // res.send(data);
       res.render("detailProduct", {
         title: "Detail Product",
         data,
@@ -113,9 +107,6 @@ class Controller {
         };
       }
       let datas = await UserProfile.findAll(option);
-      // res.send(datas);
-      // res.send(datas[0].User);
-      // console.log(datas);
       res.render("showAllUsers", { title: "Users List", datas });
     } catch (error) {
       res.send(error);
@@ -134,7 +125,8 @@ class Controller {
 
   static async showLoginForm(req, res) {
     try {
-      res.render("loginQ", { title: "Login Form" });
+      let { error } = req.query;
+      res.render("loginQ", { title: "Login Form", error });
     } catch (error) {
       res.send(error);
     }
@@ -149,26 +141,19 @@ class Controller {
       console.log(data);
       if (data) {
         let result = bcryptjs.compareSync(password, data.password);
-        // if (!result) {
-        //   res.send("Username / Password salah!");
-        // } else {
-        //   req.session.email = data.email;
-
-        //   res.redirect("/");
-        // }
-        // let result = bcryptjs.compareSync(password, data.password);
         if (!result) {
           res.send("Username / Password salah!");
         } else {
-          res.send(`${data.role} - berhasil login`);
+          req.session.email = data.email;
+          req.session.role = data.role;
+
+          res.redirect("/");
         }
       } else {
-        res.send(
-          "Username tidak ditemukan, silahkan mendaftar terlebih dahulu"
-        );
+        const errors = "tolong banget login dlu";
+        res.redirect(`/login?error=${errors}`);
       }
     } catch (error) {
-      // console.log(error);
       res.send(error);
     }
   }
@@ -183,15 +168,12 @@ class Controller {
 
   static async signupUserPost(req, res) {
     try {
-      // let { email, password, name, dateOfBirth, address, phoneNumber, gender } =
-      // req.body;
       let { email, password } = req.body;
       if (password) {
         const salt = bcryptjs.genSaltSync(10);
         const hash = bcryptjs.hashSync(password, salt);
         password = hash;
       }
-      // console.log(email, password);
       await User.create({ email, password });
       User.nodeMailer(email);
       // await UserProfile.create({
@@ -202,7 +184,6 @@ class Controller {
       //   gender,
       // });
       res.redirect("/");
-      // res.redirect;
     } catch (error) {
       console.log(error);
       if (error.name === "SequelizeValidationError") {

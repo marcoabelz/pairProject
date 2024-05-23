@@ -84,6 +84,11 @@
       </div>
       <div class="right">
         <h4 class="text-center">Log In</h4>
+        <% if (error) { %>
+         <p style="color: red;" class="m-3">
+          <%= error %>
+         </p>
+        <% } %>
         <form action="/login" method="post">
           <div class="form-group">
             <label for="email">Email</label>
