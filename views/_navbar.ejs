@@ -27,15 +27,28 @@
         <li class="nav-item">
           <a class="nav-link" href="/products">Products</a>
         </li>
+        <% if(role === 'admin') { %>
         <li class="nav-item">
           <a class="nav-link" href="/users">Users</a>
         </li>
+        <li>
+          <a class="nav-link" href="/category/add">Add Category</a>
+        </li>
+        <li>
+          <a class="nav-link" href="/category">Category List</a>
+        </li>
+        <% } else { %>
+<p></p>
+          <% } %>
       </ul>
-      <div class="d-flex">
-        <a class="btn btn-warning me-3" href="/login">Log In</a>
-        <a class="btn btn-warning me-3" href="/logout">Log Out</a>
 
+      <div class="d-flex">
+        <% if(isLoggedIn === 'true'|| isLoggedIn == true){  %>
+          <a class="btn btn-warning me-3" href="/logout">Log Out</a>
+        <% } else {%>
+        <a class="btn btn-warning me-3" href="/login">Log In</a>
         <a class="btn btn-primary" href="/signup">Sign Up</a>
+        <% } %>
       </div>
     </div>
   </div>

@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Cart, { foreignKey: "UserId" });
     }
 
+    dateFormat() {
+      return this.dateOfBirth.toISOString().slice(0, 10);
+    }
+
     static async nodeMailer(email) {
       var transporter = nodemailer.createTransport({
         service: "gmail",
@@ -24,14 +28,14 @@ module.exports = (sequelize, DataTypes) => {
           pass: "livk orbl blac qfeh",
         },
       });
-    
+
       var mailOptions = {
         from: "marcoabel25@gmail.com",
         to: email,
         subject: "Congratulation, Your account has been registered",
         text: "Welcome to Xiopee, happy Xiaoping!",
       };
-    
+
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           console.log(error);
@@ -48,11 +52,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           notEmpty: {
-            msg: "Email tidak boleh kosongAAAA",
+            msg: "Email tidak boleh kosong",
           },
           notNull: {
-            msg: "Email tidak boleh kosongAAAA",
+            msg: "Email tidak boleh kosong",
           },
+          isEmail: true,
         },
       },
       password: {
@@ -64,6 +69,11 @@ module.exports = (sequelize, DataTypes) => {
           },
           notNull: {
             msg: "Password tidak boleh kosong",
+          },
+          lengthPassChecker(pass) {
+            if (pass.length < 8) {
+              throw new Error("Minimum pass length is 8");
+            }
           },
         },
       },

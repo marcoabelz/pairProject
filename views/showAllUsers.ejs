@@ -7,7 +7,7 @@
   </head>
   <body>
     <div class="container">
-      <%- include('_navbar') %>
+      <%- include('_navbar', [isLoggedIn, role]) %>
       <!-- Search -->
       <div class="search mb-3">
         <form class="d-flex" role="search">
@@ -42,7 +42,7 @@
             <tr>
               <td><%= idx+1 %></td>
               <td><%= data.name %></td>
-              <td><%= data.dateFormat() %></td>
+              <td><%= data.dateFormat %></td>
               <td><%= data.address %></td>
               <td><%= data.phoneNumber %></td>
               <td><%= data.gender %></td>

@@ -7,7 +7,7 @@
   </head>
   <body>
     <div class="container">
-      <%- include('_navbar') %>
+      <%- include('_navbar', [isLoggedIn, role]) %>
       <h1 style="text-align: center">Form Edit Product</h1>
       <div class="form-section">
         <form method="post" action="/product/<%= products.CategoryId %>/edit" style="padding: 0px 200px">

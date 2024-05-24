@@ -7,7 +7,7 @@
   </head>
   <body>
     <div class="container">
-      <%- include('_navbar') %>
+      <%- include('_navbar', [isLoggedIn, role]) %>
       <!-- Search -->
       <div class="search mb-3">
         <form class="d-flex" role="search">
@@ -22,6 +22,9 @@
         </form>
       </div>
       <!-- End Of Search -->
+      <div class="balance">
+        <h3>Balance: Rp.<%= balance %></h3>
+      </div>
 
       <div class="add-product-section mb-3">
         <a
@@ -59,15 +62,19 @@
                   <a href="/product/<%= data.id %>" class="btn btn-primary"
                     >See Detail</a
                   >
+                  <% if(role === 'admin') { %>
                   <a href="/product/<%= data.id %>/edit" class="btn btn-warning"
                     >Edit</a
                   >
                   <a
                     href="/products/<%= data.id %>/delete"
-                    class="btn btn-danger ms-1"
+                    class="btn btn-danger ms-1 mt-2"
                     style="background-color: rgb(234, 72, 72)"
                     >Delete</a
                   >
+                  <% } else { %>
+                  <p></p>
+                  <% } %>
                 </div>
               </div>
             </div>

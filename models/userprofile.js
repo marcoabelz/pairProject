@@ -13,8 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       UserProfile.belongsTo(models.User, { foreignKey: "UserId" });
     }
 
-    dateFormat() {
-      return this.dateOfBirth.toISOString().slice(0, 10);
+    get dateFormat() {
+      let convert = this.dateOfBirth.toISOString().slice(0, 10);
+      return convert
     }
   }
   UserProfile.init(
@@ -68,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       gender: {
-        type: DataTypes.CHAR,
+        type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notEmpty: {
@@ -87,8 +88,8 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "UserProfile",
     }
   );
-  // UserProfile.beforeValidate((data, option) => {
-  //   data.balance = 0;
-  // });
+  UserProfile.beforeValidate((data, option) => {
+    data.balance = 1000000;
+  });
   return UserProfile;
 };
