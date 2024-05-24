@@ -7,7 +7,7 @@
   </head>
   <body>
     <div class="container">
-      <%- include('_navbar') %>
+      <%- include('_navbar', isLoggedIn) %>
       <h1 style="text-align: center">Form Add Product</h1>
       <div class="form-section">
         <form method="post" action="/product/add" style="padding: 0px 200px">
@@ -29,6 +29,11 @@
           <div class="mb-3">
             <label for="price" class="form-label">Price</label>
             <input type="number" class="form-control" id="price" name="price" />
+          </div>
+
+          <div class="mb-3">
+            <label for="imageUrl" class="form-label">Image Url</label>
+            <input type="text" class="form-control" id="imageUrl" name="imageUrl" />
           </div>
 
           <div class="mb-3">

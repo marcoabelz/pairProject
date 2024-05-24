@@ -5,14 +5,12 @@ const bcryptjs = require("bcryptjs");
 
 class Controller {
   //session checker
-  static async sessionChecker(req, res, next) {}
 
   static async landingPage(req, res) {
     try {
-      // let {category} = req.query
-      // console.log(req.query);
-      // console.log(datas, '++++++');
-      let userId = req.session.id;
+      let userId = req.session.userId;
+      let isLoggedIn = req.session.isLoggedIn;
+      let role = req.session.role;
 
       let datas = await Category.findAll();
 
@@ -23,6 +21,8 @@ class Controller {
         datas1,
         format_currency,
         userId,
+        isLoggedIn,
+        role,
       });
     } catch (error) {
       res.send(error);
@@ -41,10 +41,17 @@ class Controller {
         };
       }
       let datas = await Product.findAll(option);
+      let isLoggedIn = req.session.isLoggedIn;
+      let role = req.session.role;
+      let balance = req.session.balance;
+      // console.log(req.session.balance);
       res.render("showAllProducts", {
         title: "Products List",
         datas,
         format_currency,
+        isLoggedIn,
+        role,
+        balance,
       });
     } catch (error) {
       res.send(error);
@@ -54,7 +61,14 @@ class Controller {
   static async showAddProductForm(req, res) {
     try {
       let categories = await Category.findAll();
-      res.render("formAddProduct", { title: "Form Add Product", categories });
+      let isLoggedIn = req.session.isLoggedIn;
+      let role = req.session.role;
+      res.render("formAddProduct", {
+        title: "Form Add Product",
+        categories,
+        isLoggedIn,
+        role,
+      });
     } catch (error) {
       res.send(error);
     }
@@ -62,8 +76,8 @@ class Controller {
 
   static async addProductPost(req, res) {
     try {
-      let { name, description, price, CategoryId } = req.body;
-      await Product.create({ name, description, price, CategoryId });
+      let { name, description, price, imageUrl, CategoryId } = req.body;
+      await Product.create({ name, description, price, imageUrl, CategoryId });
       res.redirect("/products");
     } catch (error) {
       if (error.name === "SequelizeValidationError") {
@@ -79,10 +93,14 @@ class Controller {
     try {
       let { productId } = req.params;
       let data = await Product.findByPk(productId);
+      let isLoggedIn = req.session.isLoggedIn;
+      let role = req.session.role;
       res.render("detailProduct", {
         title: "Detail Product",
         data,
         format_currency,
+        isLoggedIn,
+        role,
       });
     } catch (error) {
       res.send(error);
@@ -97,10 +115,14 @@ class Controller {
       });
       // console.log(products);
       let categories = await Category.findAll();
+      let isLoggedIn = req.session.isLoggedIn;
+      let role = req.session.role;
       res.render("formEditProduct", {
         title: "Form Edit Product",
         products,
         categories,
+        isLoggedIn,
+        role,
       });
     } catch (error) {
       res.send(error);
@@ -138,7 +160,14 @@ class Controller {
         };
       }
       let datas = await UserProfile.findAll(option);
-      res.render("showAllUsers", { title: "Users List", datas });
+      let isLoggedIn = req.session.isLoggedIn;
+      let role = req.session.role;
+      res.render("showAllUsers", {
+        title: "Users List",
+        datas,
+        isLoggedIn,
+        role,
+      });
     } catch (error) {
       res.send(error);
     }
@@ -157,7 +186,8 @@ class Controller {
   static async showLoginForm(req, res) {
     try {
       let { error } = req.query;
-      res.render("loginQ", { title: "Login Form", error });
+      let isLoggedIn = req.session.isLoggedIn;
+      res.render("loginQ", { title: "Login Form", error, isLoggedIn });
     } catch (error) {
       res.send(error);
     }
@@ -172,12 +202,21 @@ class Controller {
       // console.log(data);
       if (data) {
         let result = bcryptjs.compareSync(password, data.password);
+        let isLoggedIn = req.session.isLoggedIn;
         if (!result) {
           res.send("Username / Password salah!");
         } else {
           req.session.email = data.email;
           req.session.role = data.role;
           req.session.userId = data.id;
+          req.session.isLoggedIn = true;
+          let userBalance = await UserProfile.findOne({
+            where: { UserId: data.id },
+          });
+          userBalance = userBalance.balance;
+          // console.log(userBalance);
+          req.session.balance = userBalance;
+          // console.log(data);
 
           res.redirect("/");
         }
@@ -186,6 +225,7 @@ class Controller {
         res.redirect(`/login?error=${errors}`);
       }
     } catch (error) {
+      console.log(error);
       res.send(error);
     }
   }
@@ -236,9 +276,16 @@ class Controller {
       });
 
       let data = dataProduct.Products;
+      let isLoggedIn = req.session.isLoggedIn;
+      let role = req.session.role;
 
       // res.send(dataProduct)
-      res.render("productByCategory", { data, format_currency });
+      res.render("productByCategory", {
+        data,
+        format_currency,
+        isLoggedIn,
+        role,
+      });
     } catch (error) {
       res.send(error);
     }
@@ -251,30 +298,40 @@ class Controller {
       res.send(error);
     }
   }
+
   static async showFormUserProfile(req, res) {
     try {
       let userId = req.session.userId;
+      let isLoggedIn = req.session.isLoggedIn;
+      let role = req.session.role;
       let data = await UserProfile.findOne({
         where: {
           UserId: userId,
         },
       });
-      // console.log(data, "DADADA");
+
+      // data.gender = data.gender.trim()
+
       if (data) {
         res.render("formUserProfile", {
           title: "Form User Profile",
           data,
           userId,
+          isLoggedIn,
+          role,
         });
-      // } else {
-      //   console.log(userId, "ETTETE");
+        // console.log(data);
+      } else {
+        //   console.log(userId, "ETTETE");
         res.render("formNewUserProfile", {
           title: "Form New User Profile",
           userId,
+          isLoggedIn,
+          role,
         });
       }
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       res.send(error);
     }
   }
@@ -284,17 +341,60 @@ class Controller {
       // console.log(req.body);
       let { name, dateOfBirth, address, phoneNumber, gender } = req.body;
       let { userId } = req.session;
+      const genderTrim = gender.trim();
       await UserProfile.create({
         name,
         dateOfBirth,
         address,
         phoneNumber,
-        gender,
+        gender: genderTrim,
         UserId: userId,
       });
       res.redirect("/");
     } catch (error) {
-      // console.log(error);
+      console.log(error);
+      res.send(error);
+    }
+  }
+
+  static async showAllCategoryList(req, res) {
+    try {
+      let data = await Category.findAll();
+      let isLoggedIn = req.session.isLoggedIn;
+      let role = req.session.role;
+      res.render("categoryList", { data, isLoggedIn, role });
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async getAddCategory(req, res) {
+    try {
+      let isLoggedIn = req.session.isLoggedIn;
+      let role = req.session.role;
+      res.render("addCategory", { isLoggedIn, role });
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async postAddCategory(req, res) {
+    try {
+      // console.log(req.body);
+      let { name, imageUrl } = req.body;
+      await Category.create({ name, imageUrl });
+      res.redirect("/category");
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async addItemsToCart(req, res) {
+    try {
+      let cart = req.session.cart;
+
+      res.redirect("/");
+    } catch (error) {
       res.send(error);
     }
   }

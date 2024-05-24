@@ -11,9 +11,11 @@
     />
   </head>
   <body>
-    <div class="container"><%- include('_navbar') %></div>
-    <a href="/userProfile/<%= userId %>">User Profile</a>
+    <div class="container"><%- include('_navbar', [isLoggedIn, role]) %></div>
     <div class="container mt-4">
+      <div class="users mb-4">
+        <a class="btn btn-outline-info btn-sm" href="/userProfile/<%= userId %>">User Profile</a>
+      </div>
       <div
         id="carouselExampleIndicators"
         class="carousel slide"

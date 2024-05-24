@@ -19,8 +19,7 @@ router.get("/logout", Controller.logout);
 //SESSION
 
 let authCheck = function (req, res, next) {
-  // console.log(req.session);
-  // req.session.id = 0
+   
   if (!req.session.email) {
     const error = "You did not login yet! :D";
     res.redirect(`/login?error=${error}`);
@@ -45,6 +44,12 @@ router.get("/", authCheck, Controller.landingPage);
 //READ PRODUCT
 router.get("/products", authCheck, Controller.showAllProduct);
 //END OF READ PRODUCT
+
+//Add Category
+router.get("/category", authCheck, Controller.showAllCategoryList);
+router.get("/category/add", authCheck, Controller.getAddCategory);
+router.post("/category/add", authCheck, Controller.postAddCategory);
+//END OF ADD CATEGORY
 
 //ADD PRODUCT
 router.get("/product/add", authCheck, Controller.showAddProductForm);
