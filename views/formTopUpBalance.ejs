@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+  </head>
+  <body>
+    <div class="container">
+      <%- include('_navbar') %>
+      <form method="post" action="/userProfile/<%= userId %>/balance">
+        <div class="mb-3">
+          <label for="balance" class="form-label">Balance</label>
+          <input
+            type="number"
+            class="form-control"
+            id="balance"
+            name="balance"
+            value="<%= data.balance %>"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Update Balance</button>
+      </form>
+      <%- include('_script') %>
+    </div>
+  </body>
+</html>

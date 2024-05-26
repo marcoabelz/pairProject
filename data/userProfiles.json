@@ -4,7 +4,8 @@
     "dateOfBirth": "1990-05-15",
     "address": "123 Main Street, City, Country",
     "phoneNumber": "123-456-7890",
-    "gender": "male",
+    "gender": "M",
+    "balance": 0,
     "UserId": 1
   },
   {
@@ -12,7 +13,8 @@
     "dateOfBirth": "1985-08-22",
     "address": "456 Oak Avenue, Town, Country",
     "phoneNumber": "987-654-3210",
-    "gender": "female",
+    "gender": "F",
+    "balance": 1000000,
     "UserId": 2
   },
   {
@@ -20,7 +22,8 @@
     "dateOfBirth": "1995-02-10",
     "address": "789 Maple Lane, Village, Country",
     "phoneNumber": "456-789-0123",
-    "gender": "male",
+    "gender": "M",
+    "balance": 0,
     "UserId": 3
   }
 ]

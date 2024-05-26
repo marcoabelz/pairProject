@@ -88,13 +88,33 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "UserProfile",
     }
   );
+  // UserProfile.beforeCreate((data, option) => {
+  //   data.balance = 0;
+  //   data.name = "user";
+  //   data.dateOfBirth = new Date();
+  //   data.address = "Tes";
+  //   data.phoneNumber = "123";
+  //   data.gender = "M";
+  // });
   UserProfile.beforeValidate((data, option) => {
-    data.balance = 0;
-    data.name = "user";
-    data.dateOfBirth = new Date();
-    data.address = "Tes";
-    data.phoneNumber = "123";
-    data.gender = "M";
+    if (!data.balance) {
+      data.balance = 0;
+    }
+    if (!data.name) {
+      data.name = "Username";
+    }
+    if (!data.dateOfBirth) {
+      data.dateOfBirth = new Date();
+    }
+    if (!data.address) {
+      data.address = "Unknown street";
+    }
+    if (!data.phoneNumber) {
+      data.phoneNumber = "08";
+    }
+    if (!data.gender) {
+      data.gender = "M";
+    }
   });
 
   return UserProfile;

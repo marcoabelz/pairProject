@@ -19,7 +19,6 @@ router.get("/logout", Controller.logout);
 //SESSION
 
 let authCheck = function (req, res, next) {
-   
   if (!req.session.email) {
     const error = "You did not login yet! :D";
     res.redirect(`/login?error=${error}`);
@@ -29,8 +28,6 @@ let authCheck = function (req, res, next) {
 };
 
 let roleAdmin = function (req, res, next) {
-  // console.log(req.session);
-
   if (req.session.role !== "admin") {
     const error = "You did not have access! :D";
     res.redirect(`/?error=${error}`);
@@ -47,8 +44,8 @@ router.get("/products", authCheck, Controller.showAllProduct);
 
 //Add Category
 router.get("/category", authCheck, Controller.showAllCategoryList);
-router.get("/category/add", authCheck, Controller.getAddCategory);
-router.post("/category/add", authCheck, Controller.postAddCategory);
+router.get("/category/add", authCheck, roleAdmin, Controller.getAddCategory);
+router.post("/category/add", authCheck, roleAdmin, Controller.postAddCategory);
 //END OF ADD CATEGORY
 
 //ADD PRODUCT
@@ -63,7 +60,12 @@ router.get("/product/category/:id", Controller.showProductByCategory);
 router.get("/product/:productId", authCheck, Controller.showDetailProductById);
 
 //EDIT
-router.get("/product/:productId/edit", authCheck, Controller.showEditProduct);
+router.get(
+  "/product/:productId/edit",
+  authCheck,
+  roleAdmin,
+  Controller.showEditProduct
+);
 router.post(
   "/product/:productId/edit",
   authCheck,
@@ -80,9 +82,15 @@ router.get("/users", authCheck, roleAdmin, Controller.showAllUser);
 //User Profile
 router.get("/userProfile/:userId", authCheck, Controller.showFormUserProfile);
 router.post("/userProfile/:userId", authCheck, Controller.userProfilePost);
+router.get(
+  "/userProfile/:userId/balance",
+  authCheck,
+  Controller.showFormTopUpBalance
+);
+router.post("/userProfile/:userId/balance", authCheck, Controller.topUpBalancePost);
 
 //DELETE
-router.get("/users/:id/delete");
+router.get("/users/:userId/delete", Controller.deleteUserById);
 router.get(
   "/products/:productId/delete",
   authCheck,

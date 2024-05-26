@@ -154,6 +154,7 @@ class Controller {
 
   static async showAllUser(req, res) {
     try {
+      let { balance } = req.session;
       let { searchUser } = req.query;
       let option = {
         include: {
@@ -175,6 +176,8 @@ class Controller {
         datas,
         isLoggedIn,
         role,
+        balance,
+        format_currency,
       });
     } catch (error) {
       res.send(error);
@@ -355,6 +358,66 @@ class Controller {
       });
       res.redirect("/");
     } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async showFormTopUpBalance(req, res) {
+    try {
+      let { userId } = req.params;
+      let { balance, role, isLoggedIn } = req.session;
+      let data = await UserProfile.findByPk(userId);
+      // res.send(data);
+      res.render("formTopUpBalance", {
+        title: "Form Update Balance",
+        data,
+        balance,
+        role,
+        isLoggedIn,
+        userId,
+      });
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async topUpBalancePost(req, res) {
+    try {
+      let { balance } = req.body;
+      let { userId } = req.params;
+      let data = await UserProfile.findOne({
+        where: {
+          UserId: userId,
+        },
+      });
+      await data.update({ balance });
+      res.redirect("/users");
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async deleteUserById(req, res) {
+    try {
+      let { userId } = req.params;
+      let data = UserProfile.findOne({
+        where: {
+          UserId: userId,
+        },
+      });
+      await UserProfile.destroy({
+        where: {
+          UserId: userId,
+        },
+      });
+      await User.destroy({
+        where: {
+          id: userId,
+        },
+      });
+      res.redirect("/users");
+    } catch (error) {
+      console.log(error);
       res.send(error);
     }
   }
