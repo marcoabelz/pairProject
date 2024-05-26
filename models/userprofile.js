@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
     get dateFormat() {
       let convert = this.dateOfBirth.toISOString().slice(0, 10);
-      return convert
+      return convert;
     }
   }
   UserProfile.init(
@@ -89,7 +89,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
   UserProfile.beforeValidate((data, option) => {
-    data.balance = 1000000;
+    data.balance = 0;
+    data.name = "user";
+    data.dateOfBirth = new Date();
+    data.address = "Tes";
+    data.phoneNumber = "123";
+    data.gender = "M";
   });
+
   return UserProfile;
 };

@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       gender: {
-        type: Sequelize.CHAR,
+        type: Sequelize.STRING,
       },
       balance: {
         type: Sequelize.INTEGER
